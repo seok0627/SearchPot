@@ -108,7 +108,7 @@ public class MainActivity extends AppCompatActivity  {
     }
 
     private void onInit() {
-        //배너광고입니다.
+        //배너광고
         AdView adView = new AdView(this);
         adView.setAdSize(AdSize.BANNER);
         adView.setAdUnitId("ca-app-pub-3940256099942544/6300978111");
