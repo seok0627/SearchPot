@@ -43,7 +43,7 @@ import java.util.Collections;
 import java.util.Comparator;
 
 public class MainActivity extends AppCompatActivity  {
-//안녕하세요
+
     private RecyclerView recyclerView;
     private RecyclerView.Adapter adapter;
     private RecyclerView.LayoutManager layoutManager;
@@ -108,7 +108,7 @@ public class MainActivity extends AppCompatActivity  {
     }
 
     private void onInit() {
-        //배너광고
+        //배너광고입니다.
         AdView adView = new AdView(this);
         adView.setAdSize(AdSize.BANNER);
         adView.setAdUnitId("ca-app-pub-3940256099942544/6300978111");
