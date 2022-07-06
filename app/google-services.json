@@ -1,0 +1,106 @@
+{
+  "project_info": {
+    "project_number": "563152028465",
+    "firebase_url": "https://searchpot-43ffe-default-rtdb.firebaseio.com",
+    "project_id": "searchpot-43ffe",
+    "storage_bucket": "searchpot-43ffe.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:563152028465:android:5fc49e1e540a5c7f32a610",
+        "android_client_info": {
+          "package_name": "app.project.searchingpot"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "563152028465-55ofmqpphl9615uctv16a6cpbg1i65ir.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCgnrpg3Q1Nhh_vnsb0ujPgC-fB3nsqFwQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "563152028465-55ofmqpphl9615uctv16a6cpbg1i65ir.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:563152028465:android:c300a1d33b580b7832a610",
+        "android_client_info": {
+          "package_name": "com.example.searchpot"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "563152028465-55ofmqpphl9615uctv16a6cpbg1i65ir.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCgnrpg3Q1Nhh_vnsb0ujPgC-fB3nsqFwQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "563152028465-55ofmqpphl9615uctv16a6cpbg1i65ir.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:563152028465:android:ae55bc78f2a7890d32a610",
+        "android_client_info": {
+          "package_name": "com.jys.searchpot"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "563152028465-6q1o94mqk5cvisnnjfciadlpnclur47g.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.jys.searchpot",
+            "certificate_hash": "e4f1c7aa069a1fa265b71765f10948f800dcbc21"
+          }
+        },
+        {
+          "client_id": "563152028465-55ofmqpphl9615uctv16a6cpbg1i65ir.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCgnrpg3Q1Nhh_vnsb0ujPgC-fB3nsqFwQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "563152028465-55ofmqpphl9615uctv16a6cpbg1i65ir.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
