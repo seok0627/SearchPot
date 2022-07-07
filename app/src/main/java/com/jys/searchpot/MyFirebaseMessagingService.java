@@ -42,7 +42,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
         builder.setContentTitle(title)
                 .setContentText(body)
-                .setSmallIcon(R.drawable.icon_searchpot);
+                .setSmallIcon(R.drawable.searchpot_main_icon_round);
 
         Notification notification = builder.build();
         notificationManager.notify(1, notification);

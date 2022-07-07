@@ -160,12 +160,11 @@ public class MainActivity extends AppCompatActivity  {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch(item.getItemId()){
             case R.id.share:
-//                Intent share = new Intent(Intent.ACTION_SEND);
-//                share.setType("text/plan");
-//                share.putExtra(Intent.EXTRA_TEXT, "https://play.google.com/store/apps/details?id=com.never.bestshot"); //공유될 url, 내 플레이스토어 주소, 아직 주소 없음
-//                startActivity(Intent.createChooser(share, "공유하기"));
+                Intent share = new Intent(Intent.ACTION_SEND);
+                share.setType("text/plan");
+                share.putExtra(Intent.EXTRA_TEXT, "https://play.google.com/store/apps/details?id=com.jys.searchpot");
+                startActivity(Intent.createChooser(share, "공유하기"));
 
-                Toast.makeText(this, "현재 이용할 수 없는 기능입니다.", Toast.LENGTH_SHORT).show();
                 break;
 
             case R.id.mail:
@@ -177,13 +176,13 @@ public class MainActivity extends AppCompatActivity  {
                 mail.putExtra(Intent.EXTRA_TEXT,
                         "--------------------------------------------\n" +
                         "<<< 주 의 사 항 >>>\n" +
-                        "★ 리스트 노출용 프로필 사진을 첨부하시는 경우 브랜드명과 함께 첨부바랍니다.\n" +
+                        "★ 리스트 노출용 프로필 사진을 첨부하시는 경우 브랜드명(한글)과 함께 첨부바랍니다.\n" +
                         "★ 리스트 노출용 프로필 사진은 반드시 브랜드 소유자만 첨부해주세요. \n" +
                         "★ 리스트 노출용 프로필 사진으로 인해 발생되는 저작권 문제는 이메일 발신자에게 있습니다.\n" +
                         "★ 브랜드명 미입력시 사진 첨부를 하시더라도 브랜드 등록 불가합니다.\n" +
                         "★ 브랜드 심사 후 등록까지 최대 일주일이 소요될 수 있습니다.\n" +
                         "--------------------------------------------\n\n\n" +
-                        "브랜드명 : \n\n" +
+                        "브랜드명(한글) : \n\n" +
                         "기타 문의사항 : \n"
                 );
                 startActivity(mail);

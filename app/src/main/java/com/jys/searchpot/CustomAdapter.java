@@ -2,27 +2,34 @@ package com.jys.searchpot;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
 import android.net.Uri;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.core.app.ActivityCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.google.android.material.snackbar.Snackbar;
 
 import java.util.ArrayList;
+import java.util.List;
 
-public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.CustomViewHolder>{
+public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.CustomViewHolder> {
 
     private ArrayList<Store> arrayList;
     private Context context;
     private String storeName = "";
+    private long backKeyPressedTime = 0;
 
     public CustomAdapter(ArrayList<Store> arrayList, Context context) {
         this.arrayList = arrayList;
@@ -34,6 +41,7 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.CustomView
     public CustomViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item, parent, false);
         CustomViewHolder holder = new CustomViewHolder(view);
+
         return holder;
     }
 
@@ -51,16 +59,18 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.CustomView
         holder.txt_ins = arrayList.get(position).getInsUrl();
         holder.txt_store = arrayList.get(position).getSellUrl();
 
-        if(holder.txt_ins.length() < 1){
+        if (holder.txt_ins.length() < 1) {
             holder.btn_ins.setBackgroundResource(R.drawable.ic_ins_nourl_1);
-        }else{
+        } else {
             holder.btn_ins.setBackgroundResource(R.drawable.ic_ins_yesurl_2);
         }
-        if(holder.txt_store.length() < 1){
+        if (holder.txt_store.length() < 1) {
             holder.btn_store.setBackgroundResource(R.drawable.ic_store_nourl_1);
-        }else{
+        } else {
             holder.btn_store.setBackgroundResource(R.drawable.ic_store_yesurl_2);
         }
+
+
     }
 
     @Override
@@ -86,39 +96,72 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.CustomView
             this.btn_ins.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if(txt_ins.length() > 0){
+
+//                  backKeyPressedTime = System.currentTimeMillis();
+//                  Snackbar.make(itemView, "[인스타그램]이 설치되지 않았습니다.\n[설치]를 눌러 설치후 재실행해주세요.", 1500).setAction("설치", new View.OnClickListener() {
+//                      @Override
+//                      public void onClick(View v) {
+//                          Intent intent = new Intent(Intent.ACTION_VIEW);
+//                          intent.addCategory(Intent.CATEGORY_DEFAULT);
+//                          intent.setData(Uri.parse("market://details?id=com.instagram.android"));
+//                          context.startActivity(intent);
+//                      }
+//                  }).show();
+//                  return;
+
+                    if (txt_ins.length() > 0) {
                         Context context = v.getContext();
                         Intent intent = new Intent(Intent.ACTION_VIEW);
                         intent.setData(Uri.parse(txt_ins));
-                        try{
+                        try {
                             context.startActivity(intent);
-                        } catch (Exception e){
+                        } catch (Exception e) {
                             e.printStackTrace();
                         }
-                    }else{
+                    } else {
                         Snackbar.make(itemView, "등록된 인스타 URL이 없습니다.", 800).show();
 //                        Toast.makeText(context, "", Toast.LENGTH_SHORT).show();
                     }
+
                 }
             });
 
             this.btn_store.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if(txt_store.length() > 0){
+                    if (txt_store.length() > 0) {
                         Context context = v.getContext();
                         Intent intent = new Intent(Intent.ACTION_VIEW);
                         intent.setData(Uri.parse(txt_store));
-                        try{
+                        try {
                             context.startActivity(intent);
-                        } catch (Exception e){
+                        } catch (Exception e) {
                             e.printStackTrace();
                         }
-                    }else{
+                    } else {
                         Snackbar.make(itemView, "등록된 스토어 URL이 없습니다.", 800).show();
                     }
                 }
             });
         }
     }
+
+    //인스타 설치 여부
+//    public void goAppRun(final String packageNames) {
+//        PackageManager packageManager = context.getPackageManager();
+//        List<ResolveInfo> mApps;
+//        Intent mIntent = new Intent(Intent.ACTION_MAIN, null);
+//        mIntent.addCategory(Intent.CATEGORY_LAUNCHER);
+//        mApps = packageManager.queryIntentActivities(mIntent, 0);
+//        try {
+//            for (int i = 0; i < mApps.size(); i++) {
+//                if (mApps.get(i).activityInfo.packageName.startsWith(packageNames)) {
+//                    isExist = true;
+//                    break;
+//                }
+//            }
+//        } catch (Exception e) {
+//            isExist = false;
+//        }
+//    }
 }
