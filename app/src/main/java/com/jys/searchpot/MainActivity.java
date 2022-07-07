@@ -65,9 +65,9 @@ public class MainActivity extends AppCompatActivity  {
 
     Button button[] = new Button[20];
     Integer[] Rid_button = {R.id.btn_0,  R.id.btn_1,  R.id.btn_2,  R.id.btn_3,  R.id.btn_4,       //전체, ㄱ, ㄲ, ㄴ, ㄷ
-            R.id.btn_5,  R.id.btn_6,  R.id.btn_7,  R.id.btn_8,  R.id.btn_9,       //ㄸ, ㄹ, ㅁ, ㅂ, ㅃ
-            R.id.btn_10, R.id.btn_11, R.id.btn_12, R.id.btn_13, R.id.btn_14,      //ㅅ, ㅆ, ㅇ, ㅈ, ㅉ
-            R.id.btn_15, R.id.btn_16, R.id.btn_17, R.id.btn_18, R.id.btn_19 };    //ㅊ, ㅋ, ㅌ, ㅍ, ㅎ
+                            R.id.btn_5,  R.id.btn_6,  R.id.btn_7,  R.id.btn_8,  R.id.btn_9,       //ㄸ, ㄹ, ㅁ, ㅂ, ㅃ
+                            R.id.btn_10, R.id.btn_11, R.id.btn_12, R.id.btn_13, R.id.btn_14,      //ㅅ, ㅆ, ㅇ, ㅈ, ㅉ
+                            R.id.btn_15, R.id.btn_16, R.id.btn_17, R.id.btn_18, R.id.btn_19 };    //ㅊ, ㅋ, ㅌ, ㅍ, ㅎ
 
     String str_Array[] = new String[]{
             "",  "ㄱ", "ㄲ", "ㄴ", "ㄷ",
