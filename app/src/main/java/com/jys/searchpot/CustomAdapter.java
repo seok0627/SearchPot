@@ -56,6 +56,7 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.CustomView
                 .into(holder.iv_profrile);
 
         holder.tv_storeName.setText(arrayList.get(position).getStoreName());
+        holder.txt_name = arrayList.get(position).getStoreName();
         holder.txt_ins = arrayList.get(position).getInsUrl();
         holder.txt_store = arrayList.get(position).getSellUrl();
 
@@ -83,6 +84,7 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.CustomView
         TextView tv_storeName;
         Button btn_ins;
         Button btn_store;
+        String txt_name = "";
         String txt_ins = "";
         String txt_store = "";
 
@@ -92,6 +94,13 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.CustomView
             this.tv_storeName = itemView.findViewById(R.id.tv_storeName);
             this.btn_ins = itemView.findViewById(R.id.btn_ins);
             this.btn_store = itemView.findViewById(R.id.btn_store);
+
+            this.tv_storeName.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    //Snackbar.make(itemView, txt_name + " 터치", 1500).show();
+                }
+            });
 
             this.btn_ins.setOnClickListener(new View.OnClickListener() {
                 @Override

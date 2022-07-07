@@ -79,6 +79,9 @@ public class MainActivity extends AppCompatActivity  {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        //상단바 문구 지정
+        getSupportActionBar().setTitle("");
         onInit();
         onAdLoad();
         onData("");
@@ -171,7 +174,7 @@ public class MainActivity extends AppCompatActivity  {
                 mail.setType("plain/text");
                 String[] address = {"dydtjr0627@naver.com"};
                 mail.putExtra(Intent.EXTRA_EMAIL, address);
-                mail.putExtra(Intent.EXTRA_SUBJECT, "(Search Pot) 문의사항 입니다!");
+                mail.putExtra(Intent.EXTRA_SUBJECT, "(써치팟) 문의사항 입니다!");
                 mail.putExtra(Intent.EXTRA_TEXT,
                         "--------------------------------------------\n" +
                         "<<< 주 의 사 항 >>>\n" +
@@ -266,6 +269,7 @@ public class MainActivity extends AppCompatActivity  {
                 adapter.notifyDataSetChanged(); // 리스트 저장 및 새로고침
                 cnt = adapter.getItemCount();
                 m_tv_cnt.setText("총 "+cnt+"개");
+                getSupportActionBar().setTitle("총 "+cnt+"개");
             }
 
             @Override
@@ -324,7 +328,7 @@ public class MainActivity extends AppCompatActivity  {
                 //액티비티 종료 후
                 ActivityCompat.finishAffinity(this);
                 //프로세스 종료
-                System.exit(0);
+                finish();
             }
         }
     }
