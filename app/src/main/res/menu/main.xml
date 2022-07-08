@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
+
     <item
         android:id="@+id/search"
         android:icon="@drawable/ic_menu_search"
@@ -14,14 +15,20 @@
         app:showAsAction="always" />
 
     <item
-        android:id="@+id/mail"
-        android:title="문의하기"
-        app:showAsAction="never" />
+        android:icon="@drawable/ic_menu_etc"
+        android:title="더보기"
+        app:showAsAction="always">
 
-    <item
-        android:id="@+id/share"
-        android:iconTint="@color/black"
-        android:title="공유하기"
+        <menu>
+            <item
+                android:id="@+id/mail"
+                android:icon="@drawable/ic_menu_mail"
+                android:title="　문의하기" />
 
-        app:showAsAction="never" />
+            <item
+                android:id="@+id/share"
+                android:icon="@drawable/ic_menu_share"
+                android:title="　공유하기" />
+        </menu>
+    </item>
 </menu>
