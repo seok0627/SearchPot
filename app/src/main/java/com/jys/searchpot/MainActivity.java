@@ -283,6 +283,16 @@ public class MainActivity extends AppCompatActivity  {
         recyclerView.setAdapter(adapter); // 리사이클러뷰에 어댑터 연결
     }
 
+    //firestore 적용시 필요한 구문
+    /*
+    for (QueryDocumentSnapshot document : task.getResult()) {
+        Store store = document.toObject(Store.class);
+        arrayList.add(store);
+        Collections.sort(arrayList, sortStoreName);
+        Log.d("firestoreTest", document.getId() + " => " + document.getData());
+    }
+    */
+
     //화면 터치시 키보드 숨기기
     @Override
     public boolean dispatchTouchEvent(MotionEvent ev) {
