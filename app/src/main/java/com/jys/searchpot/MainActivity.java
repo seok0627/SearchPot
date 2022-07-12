@@ -26,6 +26,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdSize;
@@ -44,7 +45,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 
-public class MainActivity extends AppCompatActivity  {
+public class MainActivity extends AppCompatActivity {
 
     private RecyclerView recyclerView;
     private RecyclerView.Adapter adapter;
@@ -57,6 +58,7 @@ public class MainActivity extends AppCompatActivity  {
     private EditText m_et_search;
     private TextView m_tv_cnt;
     private AdView mAdView;
+    private SwipeRefreshLayout layoutSwipeRefresh;
 
     private int cnt = 0;
     private long backKeyPressedTime = 0;
@@ -64,16 +66,17 @@ public class MainActivity extends AppCompatActivity  {
     public String Name, InsAddr, StoreAddr = "";
 
     Button button[] = new Button[20];
-    Integer[] Rid_button = {R.id.btn_0,  R.id.btn_1,  R.id.btn_2,  R.id.btn_3,  R.id.btn_4,       //전체, ㄱ, ㄲ, ㄴ, ㄷ
-                            R.id.btn_5,  R.id.btn_6,  R.id.btn_7,  R.id.btn_8,  R.id.btn_9,       //ㄸ, ㄹ, ㅁ, ㅂ, ㅃ
-                            R.id.btn_10, R.id.btn_11, R.id.btn_12, R.id.btn_13, R.id.btn_14,      //ㅅ, ㅆ, ㅇ, ㅈ, ㅉ
-                            R.id.btn_15, R.id.btn_16, R.id.btn_17, R.id.btn_18, R.id.btn_19 };    //ㅊ, ㅋ, ㅌ, ㅍ, ㅎ
+    Integer[] Rid_button =
+            {R.id.btn_0, R.id.btn_1,  R.id.btn_2,  R.id.btn_3,  R.id.btn_4,       //전체, ㄱ, ㄲ, ㄴ, ㄷ
+             R.id.btn_5,  R.id.btn_6,  R.id.btn_7,  R.id.btn_8,  R.id.btn_9,      //ㄸ, ㄹ, ㅁ, ㅂ, ㅃ
+             R.id.btn_10, R.id.btn_11, R.id.btn_12, R.id.btn_13, R.id.btn_14,     //ㅅ, ㅆ, ㅇ, ㅈ, ㅉ
+             R.id.btn_15, R.id.btn_16, R.id.btn_17, R.id.btn_18, R.id.btn_19};    //ㅊ, ㅋ, ㅌ, ㅍ, ㅎ
 
     String str_Array[] = new String[]{
-            "",  "ㄱ", "ㄲ", "ㄴ", "ㄷ",
+            "", "ㄱ", "ㄲ", "ㄴ", "ㄷ",
             "ㄸ", "ㄹ", "ㅁ", "ㅂ", "ㅃ",
             "ㅅ", "ㅆ", "ㅇ", "ㅈ", "ㅉ",
-            "ㅊ", "ㅋ", "ㅌ", "ㅍ", "ㅎ" };
+            "ㅊ", "ㅋ", "ㅌ", "ㅍ", "ㅎ"};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -83,7 +86,7 @@ public class MainActivity extends AppCompatActivity  {
         //상단바 문구 지정
         getSupportActionBar().setTitle("");
         onInit();
-        onAdLoad();
+//        onAdLoad();
         onData("");
         onBtnAllSel();
 
@@ -102,11 +105,24 @@ public class MainActivity extends AppCompatActivity  {
             @Override
             public void afterTextChanged(Editable editable) {
                 clearText();
-                if (m_et_search.getText().toString().length() == 0){
+                if (m_et_search.getText().toString().length() == 0) {
                     onBtnAllSel();
                 }
                 String text = m_et_search.getText().toString();
                 onData(text);
+            }
+        });
+
+        layoutSwipeRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                if (m_lay_edit.getVisibility() == View.VISIBLE) {
+                    m_lay_edit.setVisibility(View.GONE);
+                }
+                onBtnAllSel();
+                m_et_search.setText("");
+                onData("");
+                layoutSwipeRefresh.setRefreshing(false);
             }
         });
     }
@@ -128,10 +144,12 @@ public class MainActivity extends AppCompatActivity  {
         database = FirebaseDatabase.getInstance(); // 파이어베이스 데이터베이스 연동
         databaseReference = database.getReference("Store"); // 파이어베이스 STORE DB 테이블 연결
         databaseNewReference = database.getReference();
-        for(int i = 0; i <= 19; i++){
+        layoutSwipeRefresh = findViewById(R.id.swipeRefresh);
+
+        for (int i = 0; i <= 19; i++) {
             button[i] = (Button) findViewById(Rid_button[i]);
         }
-        for(int i = 0; i <= 19; i++){
+        for (int i = 0; i <= 19; i++) {
             final int INDEX;
             INDEX = i;
             button[INDEX].setOnClickListener(new View.OnClickListener() {
@@ -139,7 +157,7 @@ public class MainActivity extends AppCompatActivity  {
                 @Override
                 public void onClick(View view) {
                     clearText();
-                    if(m_et_search.getText().toString().length() >= 1){
+                    if (m_et_search.getText().toString().length() >= 1) {
                         m_et_search.setText("");
                         button[0].setBackgroundResource(R.drawable.bg_round_white);
                         button[0].setTextColor(Color.parseColor("#000000"));
@@ -158,9 +176,10 @@ public class MainActivity extends AppCompatActivity  {
         getMenuInflater().inflate(R.menu.main, menu);
         return super.onCreateOptionsMenu(menu);
     }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch(item.getItemId()){
+        switch (item.getItemId()) {
             case R.id.share:
                 Intent share = new Intent(Intent.ACTION_SEND);
                 share.setType("text/plan");
@@ -177,15 +196,15 @@ public class MainActivity extends AppCompatActivity  {
                 mail.putExtra(Intent.EXTRA_SUBJECT, "(써치팟) 문의사항 입니다!");
                 mail.putExtra(Intent.EXTRA_TEXT,
                         "--------------------------------------------\n" +
-                        "<<< 주 의 사 항 >>>\n" +
-                        "★ 리스트 노출용 프로필 사진을 첨부하시는 경우 브랜드명(한글)과 함께 첨부바랍니다.\n" +
-                        "★ 리스트 노출용 프로필 사진은 반드시 브랜드 소유자만 첨부해주세요. \n" +
-                        "★ 리스트 노출용 프로필 사진으로 인해 발생되는 저작권 문제는 이메일 발신자에게 있습니다.\n" +
-                        "★ 브랜드명 미입력시 사진 첨부를 하시더라도 브랜드 등록 불가합니다.\n" +
-                        "★ 브랜드 심사 후 등록까지 최대 일주일이 소요될 수 있습니다.\n" +
-                        "--------------------------------------------\n\n\n" +
-                        "브랜드명(한글) : \n\n" +
-                        "기타 문의사항 : \n"
+                                "<<< 주 의 사 항 >>>\n" +
+                                "★ 리스트 노출용 프로필 사진을 첨부하시는 경우 브랜드명(한글)과 함께 첨부바랍니다.\n" +
+                                "★ 리스트 노출용 프로필 사진은 반드시 브랜드 소유자만 첨부해주세요. \n" +
+                                "★ 리스트 노출용 프로필 사진으로 인해 발생되는 저작권 문제는 이메일 발신자에게 있습니다.\n" +
+                                "★ 브랜드명 미입력시 사진 첨부를 하시더라도 브랜드 등록 불가합니다.\n" +
+                                "★ 브랜드 심사 후 등록까지 최대 일주일이 소요될 수 있습니다.\n" +
+                                "--------------------------------------------\n\n\n" +
+                                "브랜드명(한글) : \n\n" +
+                                "기타 문의사항 : \n"
                 );
                 startActivity(mail);
                 break;
@@ -206,6 +225,7 @@ public class MainActivity extends AppCompatActivity  {
                         NewStore newStore = new NewStore(Name, InsAddr, StoreAddr);
                         databaseNewReference.child("NewStore").push().setValue(newStore);
                     }
+
                     @Override
                     public void onCnacelClicked() {
                     }
@@ -214,12 +234,13 @@ public class MainActivity extends AppCompatActivity  {
                 break;
 
             case R.id.search:
-                if(m_lay_edit.getVisibility() == View.VISIBLE){
+                if (m_lay_edit.getVisibility() == View.VISIBLE) {
                     m_lay_edit.setVisibility(View.GONE);
                     onBtnAllSel();
                     m_et_search.setText("");
-                }else{
+                } else {
                     m_lay_edit.setVisibility(View.VISIBLE);
+                    m_et_search.setSelected(true);
                 }
                 break;
         }
@@ -228,7 +249,7 @@ public class MainActivity extends AppCompatActivity  {
 
     //초성버튼 색상, 글자색 초기화
     private void clearText() {
-        for(int i = 0; i <= 19; i++){
+        for (int i = 0; i <= 19; i++) {
             button[i].setBackgroundResource(R.drawable.bg_round_white);
             button[i].setTextColor(Color.parseColor("#000000"));
         }
@@ -247,20 +268,22 @@ public class MainActivity extends AppCompatActivity  {
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 arrayList.clear(); // 기존 배열리스트 초기화
 
-                if(searchText.length() == 0){
+                if (searchText.length() == 0) {
                     for (DataSnapshot snapshot : dataSnapshot.getChildren()) { //반복문으로 데이터 List 추출
                         Store store = snapshot.getValue(Store.class); //만들어뒀던 store 객체에 데이터를 담음
                         arrayList.add(store);
                         Collections.sort(arrayList, sortStoreName);
                     }
-                }else{
+                } else {
                     for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                         Store store = snapshot.getValue(Store.class);
                         String iniName = HangulUtils.getHangulInitialSound(store.getStoreName(), searchText); //자음 검색을 가게명으로 수행
-                        if(store.getStoreName().toLowerCase().contains(searchText)){
-                            arrayList.add(store);
-                            Collections.sort(arrayList, sortStoreName);
-                        }else if(iniName.indexOf(searchText) >= 0){
+//                        if (store.getStoreName().toLowerCase().contains(searchText)) {
+//                            arrayList.add(store);
+//                            Collections.sort(arrayList, sortStoreName);
+//                        }
+//                        else
+                            if (iniName.indexOf(searchText) >= 0) {
                             arrayList.add(store);
                             Collections.sort(arrayList, sortStoreName);
                         }
@@ -268,8 +291,8 @@ public class MainActivity extends AppCompatActivity  {
                 }
                 adapter.notifyDataSetChanged(); // 리스트 저장 및 새로고침
                 cnt = adapter.getItemCount();
-                m_tv_cnt.setText("총 "+cnt+"개");
-                getSupportActionBar().setTitle("총 "+cnt+"개");
+                m_tv_cnt.setText("총 " + cnt + "개");
+                getSupportActionBar().setTitle("총 " + cnt + "개");
             }
 
             @Override
@@ -324,11 +347,11 @@ public class MainActivity extends AppCompatActivity  {
     //뒤로가기 버튼 클릭시 앱 종료
     @Override
     public void onBackPressed() {
-        if(m_lay_edit.getVisibility() == View.VISIBLE){
+        if (m_lay_edit.getVisibility() == View.VISIBLE) {
             m_lay_edit.setVisibility(View.GONE);
             onBtnAllSel();
             m_et_search.setText("");
-        }else{
+        } else {
             if (System.currentTimeMillis() > backKeyPressedTime + 2000) {
                 backKeyPressedTime = System.currentTimeMillis();
                 Toast.makeText(this, "\'뒤로\' 버튼을 한번 더 누르시면 종료됩니다.", Toast.LENGTH_SHORT).show();
@@ -348,7 +371,7 @@ public class MainActivity extends AppCompatActivity  {
 
         @Override
         public int compare(Store o1, Store o2) {
-            return Collator.getInstance().compare(o1.storeName,o2.storeName);
+            return Collator.getInstance().compare(o1.storeName, o2.storeName);
         }
     };
 }

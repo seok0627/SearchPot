@@ -52,7 +52,9 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.CustomView
         Glide.with(holder.itemView)
                 .load(arrayList.get(position).getProfile())
                 .error(R.drawable.ic_list_0)
+                .override(200,200)
                 .circleCrop()
+                .thumbnail(0.1f)
                 .into(holder.iv_profrile);
 
         holder.tv_storeName.setText(arrayList.get(position).getStoreName());
@@ -70,8 +72,6 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.CustomView
         } else {
             holder.btn_store.setBackgroundResource(R.drawable.ic_store_yesurl_2);
         }
-
-
     }
 
     @Override

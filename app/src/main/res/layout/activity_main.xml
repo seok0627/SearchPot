@@ -263,6 +263,13 @@
         android:layout_marginBottom="5dp"
         android:text=""/>
 
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+
+        android:id="@+id/swipeRefresh"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1">
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerView"
         android:layout_width="match_parent"
@@ -271,7 +278,10 @@
         android:scrollbars="none">
     </androidx.recyclerview.widget.RecyclerView>
 
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
     <com.google.android.gms.ads.AdView
+        android:visibility="gone"
         xmlns:ads="http://schemas.android.com/apk/res-auto"
         android:id="@+id/adView"
         android:layout_width="match_parent"
