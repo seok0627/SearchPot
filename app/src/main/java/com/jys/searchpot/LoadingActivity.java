@@ -32,12 +32,12 @@ public class LoadingActivity extends AppCompatActivity {
 
     }
 
-    private void onInit() {
+    public void onInit() {
         lay_loading = (LinearLayout) findViewById(R.id.lay_loading);
         anim_FadeIn = AnimationUtils.loadAnimation(this, R.anim.anim_splash_fadein);
     }
 
-    private void onAnimation() {
+    public void onAnimation() {
         anim_FadeIn.setAnimationListener(new Animation.AnimationListener() {
             @Override
             public void onAnimationStart(Animation animation) {
@@ -56,7 +56,7 @@ public class LoadingActivity extends AppCompatActivity {
     }
 
     //네트워크 연결 체크
-    private void NetworkCheck() {
+    public void NetworkCheck() {
         ConnectivityManager cm =
                 (ConnectivityManager) this.getSystemService(Context.CONNECTIVITY_SERVICE);
 
@@ -86,7 +86,7 @@ public class LoadingActivity extends AppCompatActivity {
         }
     }
 
-    private void Loadingstart() {
+    public void Loadingstart() {
         Handler handler = new Handler();
         handler.postDelayed(new Runnable() {
             public void run() {

@@ -19,3 +19,12 @@
 # If you keep the line number information, uncomment this to
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
+
+-keep class com.jys.searchpot.Store { *; }
+#-keep class com.jys.searchpot.MainActivity { *; }
+#-keep class com.jys.searchpot.LoadingActivity { *; }
+#-keep class com.jys.searchpot.CustomAdapter { *; }
+#-keep class com.jys.searchpot.R { *; }
+#-keep class com.jys.searchpot.HangulUtils { *; }
+#-keep class com.jys.searchpot.MyFirebaseMessagingService { *; }
+#-keep class com.jys.searchpot.BuildConfig { *; }

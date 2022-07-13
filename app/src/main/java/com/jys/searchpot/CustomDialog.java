@@ -29,7 +29,6 @@ public class CustomDialog extends Dialog implements View.OnClickListener{
     //인터페이스 설정
     interface CustomDialogListener{
         void onOkClicked(String name, String ins, String store);
-        void onCnacelClicked();
     }
 
     //호출할 리스너 초기화
@@ -65,8 +64,6 @@ public class CustomDialog extends Dialog implements View.OnClickListener{
                     String ins = et_ins.getText().toString();
                     String stroe = et_store.getText().toString();
                     customDialogListener.onOkClicked(name,ins,stroe);
-                    dismiss();
-                    Toast.makeText(context, "브랜드 등록 요청이 완료됐어요", Toast.LENGTH_SHORT).show();
                 }
                 break;
             case R.id.btn_cancel:

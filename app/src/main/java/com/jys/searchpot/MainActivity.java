@@ -2,6 +2,7 @@ package com.jys.searchpot;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
@@ -22,6 +23,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -34,43 +36,67 @@ import com.google.android.gms.ads.AdView;
 import com.google.android.gms.ads.MobileAds;
 import com.google.android.gms.ads.initialization.InitializationStatus;
 import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.firestore.DocumentChange;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.EventListener;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.FirebaseFirestoreSettings;
+import com.google.firebase.firestore.MetadataChanges;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.File;
+import java.io.FileOutputStream;
 import java.text.Collator;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashMap;
+import java.util.Map;
 
 public class MainActivity extends AppCompatActivity {
 
-    private RecyclerView recyclerView;
-    private RecyclerView.Adapter adapter;
-    private RecyclerView.LayoutManager layoutManager;
-    private ArrayList<Store> arrayList;
-    private FirebaseDatabase database;
-    private DatabaseReference databaseReference;
-    private DatabaseReference databaseNewReference;
-    private LinearLayout m_lay_edit;
-    private EditText m_et_search;
-    private TextView m_tv_cnt;
-    private AdView mAdView;
-    private SwipeRefreshLayout layoutSwipeRefresh;
+    public RecyclerView recyclerView;
+    public RecyclerView.Adapter adapter;
+    public RecyclerView.LayoutManager layoutManager;
+    public ArrayList<Store> arrayList;
+    public FirebaseDatabase database;
+    public FirebaseFirestore db;
+    public DatabaseReference databaseReference;
+    public DatabaseReference databaseNewReference;
+    public LinearLayout m_lay_edit;
+    public EditText m_et_search;
+    public TextView m_tv_cnt;
+    public AdView mAdView;
+    public SwipeRefreshLayout layoutSwipeRefresh;
+    public FileOutputStream outputStream;
 
-    private int cnt = 0;
-    private long backKeyPressedTime = 0;
-
-    public String Name, InsAddr, StoreAddr = "";
+    public int cnt = 0;
+    public long backKeyPressedTime = 0;
+    public boolean overlapFlag, alreadyFlag = false;
+    public String jsonData = "";
 
     Button button[] = new Button[20];
     Integer[] Rid_button =
-            {R.id.btn_0, R.id.btn_1,  R.id.btn_2,  R.id.btn_3,  R.id.btn_4,       //전체, ㄱ, ㄲ, ㄴ, ㄷ
-             R.id.btn_5,  R.id.btn_6,  R.id.btn_7,  R.id.btn_8,  R.id.btn_9,      //ㄸ, ㄹ, ㅁ, ㅂ, ㅃ
-             R.id.btn_10, R.id.btn_11, R.id.btn_12, R.id.btn_13, R.id.btn_14,     //ㅅ, ㅆ, ㅇ, ㅈ, ㅉ
-             R.id.btn_15, R.id.btn_16, R.id.btn_17, R.id.btn_18, R.id.btn_19};    //ㅊ, ㅋ, ㅌ, ㅍ, ㅎ
+            {R.id.btn_0, R.id.btn_1, R.id.btn_2, R.id.btn_3, R.id.btn_4,       //전체, ㄱ, ㄲ, ㄴ, ㄷ
+                    R.id.btn_5, R.id.btn_6, R.id.btn_7, R.id.btn_8, R.id.btn_9,      //ㄸ, ㄹ, ㅁ, ㅂ, ㅃ
+                    R.id.btn_10, R.id.btn_11, R.id.btn_12, R.id.btn_13, R.id.btn_14,     //ㅅ, ㅆ, ㅇ, ㅈ, ㅉ
+                    R.id.btn_15, R.id.btn_16, R.id.btn_17, R.id.btn_18, R.id.btn_19};    //ㅊ, ㅋ, ㅌ, ㅍ, ㅎ
 
     String str_Array[] = new String[]{
             "", "ㄱ", "ㄲ", "ㄴ", "ㄷ",
@@ -93,12 +119,10 @@ public class MainActivity extends AppCompatActivity {
         m_et_search.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
             }
 
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
             }
 
             //edittext 글자 변화 있을때마다 호출(TextWatcher)
@@ -127,7 +151,7 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    private void onInit() {
+    public void onInit() {
         //배너광고
         AdView adView = new AdView(this);
         adView.setAdSize(AdSize.BANNER);
@@ -142,8 +166,9 @@ public class MainActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(layoutManager);
         arrayList = new ArrayList<>(); // User 객체를 담을 어레이 리스트 (어댑터쪽으로)
         database = FirebaseDatabase.getInstance(); // 파이어베이스 데이터베이스 연동
+        db = FirebaseFirestore.getInstance();
         databaseReference = database.getReference("Store"); // 파이어베이스 STORE DB 테이블 연결
-        databaseNewReference = database.getReference();
+        databaseNewReference = database.getReference("NewStore");
         layoutSwipeRefresh = findViewById(R.id.swipeRefresh);
 
         for (int i = 0; i <= 19; i++) {
@@ -214,20 +239,63 @@ public class MainActivity extends AppCompatActivity {
                 dialog.setCancelable(false);
                 dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
 
-
                 dialog.setDialogListener(new CustomDialog.CustomDialogListener() {
                     @Override
                     public void onOkClicked(String name, String ins, String store) {
-                        Name = name;
-                        InsAddr = ins;
-                        StoreAddr = store;
 
-                        NewStore newStore = new NewStore(Name, InsAddr, StoreAddr);
-                        databaseNewReference.child("NewStore").push().setValue(newStore);
-                    }
+                        databaseNewReference.addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                overlapFlag = false;
+                                alreadyFlag = false;
 
-                    @Override
-                    public void onCnacelClicked() {
+                                for (DataSnapshot snapshot : dataSnapshot.getChildren()) { //반복문으로 데이터 List 추출
+                                    Store store = snapshot.getValue(Store.class); //만들어뒀던 store 객체에 데이터를 담음
+
+                                    for (int i = 0; i < arrayList.size(); i++) {
+                                        if (name.equals(store.storeName)) {
+                                            overlapFlag = true;
+                                        } else if (name.equals(arrayList.get(i).storeName)) {
+                                            alreadyFlag = true;
+                                        }
+                                    }
+                                }
+
+                                if (overlapFlag == true) {
+                                    Toast.makeText(MainActivity.this, "이미 등록 요청된 브랜드명입니다.", Toast.LENGTH_SHORT).show();
+                                } else if (alreadyFlag == true) {
+                                    Toast.makeText(MainActivity.this, "이미 등록 완료된 브랜드명입니다.", Toast.LENGTH_SHORT).show();
+                                } else {
+                                    NewStore newStore = new NewStore(name, ins, store);
+                                    databaseNewReference.push().setValue(newStore);
+                                    Toast.makeText(MainActivity.this, "브랜드 등록 요청이 완료됐어요.", Toast.LENGTH_SHORT).show();
+                                    dialog.dismiss();
+                                }
+                            }
+
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError databaseError) {
+                            }
+                        });
+
+                        /*firestore에 등록해야하는 경우*/
+//                        Map<String, Object> user = new HashMap<>();
+//                        user.put("insUrl", ins);
+//                        user.put("sellUrl", store);
+//                        user.put("storeName", name);
+//
+//                        db.collection("newStore")
+//                                .add(user)
+//                                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+//                                    @Override
+//                                    public void onSuccess(DocumentReference documentReference) {
+//                                    }
+//                                })
+//                                .addOnFailureListener(new OnFailureListener() {
+//                                    @Override
+//                                    public void onFailure(@NonNull Exception e) {
+//                                    }
+//                                });
                     }
                 });
                 dialog.show();
@@ -242,13 +310,14 @@ public class MainActivity extends AppCompatActivity {
                     m_lay_edit.setVisibility(View.VISIBLE);
                     m_et_search.setSelected(true);
                 }
+
                 break;
         }
         return super.onOptionsItemSelected(item);
     }
 
     //초성버튼 색상, 글자색 초기화
-    private void clearText() {
+    public void clearText() {
         for (int i = 0; i <= 19; i++) {
             button[i].setBackgroundResource(R.drawable.bg_round_white);
             button[i].setTextColor(Color.parseColor("#000000"));
@@ -256,13 +325,18 @@ public class MainActivity extends AppCompatActivity {
     }
 
     //전체버튼 클릭상태 셋팅
-    private void onBtnAllSel() {
+    public void onBtnAllSel() {
         button[0].setBackgroundResource(R.drawable.bg_round_select);
         button[0].setTextColor(Color.parseColor("#ffffff"));
     }
 
     //리스트 가져오기, 초성으로 검색되는 경우 고려
-    private void onData(String searchText) {
+    public void onData(String searchText) {
+        RealtimeDatabase(searchText);
+        //FirestoreDatabase(searchText);
+    }
+
+    public void RealtimeDatabase(String searchText) {
         databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -283,12 +357,14 @@ public class MainActivity extends AppCompatActivity {
 //                            Collections.sort(arrayList, sortStoreName);
 //                        }
 //                        else
-                            if (iniName.indexOf(searchText) >= 0) {
+                        if (iniName.indexOf(searchText) >= 0) {
                             arrayList.add(store);
                             Collections.sort(arrayList, sortStoreName);
                         }
                     }
                 }
+                //int numberCount = arrayList.size(); //arrayList 데이터 수 확인
+
                 adapter.notifyDataSetChanged(); // 리스트 저장 및 새로고침
                 cnt = adapter.getItemCount();
                 m_tv_cnt.setText("총 " + cnt + "개");
@@ -306,15 +382,43 @@ public class MainActivity extends AppCompatActivity {
         recyclerView.setAdapter(adapter); // 리사이클러뷰에 어댑터 연결
     }
 
-    //firestore 적용시 필요한 구문
-    /*
-    for (QueryDocumentSnapshot document : task.getResult()) {
-        Store store = document.toObject(Store.class);
-        arrayList.add(store);
-        Collections.sort(arrayList, sortStoreName);
-        Log.d("firestoreTest", document.getId() + " => " + document.getData());
+    public void FirestoreDatabase(String searchText) {
+        db.collection("store")
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        arrayList.clear(); // 기존 배열리스트 초기화
+                        if (task.isSuccessful()) {
+                            if (searchText.length() == 0) {
+                                for (QueryDocumentSnapshot snapshot : task.getResult()) {
+                                    Store store = snapshot.toObject(Store.class);
+                                    arrayList.add(store);
+                                    Collections.sort(arrayList, sortStoreName);
+                                }
+                            } else {
+                                for (QueryDocumentSnapshot snapshot : task.getResult()) {
+                                    Store store = snapshot.toObject(Store.class);
+                                    String iniName = HangulUtils.getHangulInitialSound(store.getStoreName(), searchText); //자음 검색을 가게명으로 수행
+
+                                    if (iniName.indexOf(searchText) >= 0) {
+                                        arrayList.add(store);
+                                        Collections.sort(arrayList, sortStoreName);
+                                    }
+                                }
+                            }
+                        } else {
+                            Toast.makeText(MainActivity.this, "잠시 후 다시 시도해주세요.", Toast.LENGTH_SHORT).show();
+                        }
+
+                        adapter.notifyDataSetChanged(); // 리스트 저장 및 새로고침
+                        cnt = adapter.getItemCount();
+                        m_tv_cnt.setText("총 " + cnt + "개");
+                        getSupportActionBar().setTitle("총 " + cnt + "개");
+
+                    }
+                });
     }
-    */
 
     //화면 터치시 키보드 숨기기
     @Override
@@ -323,7 +427,7 @@ public class MainActivity extends AppCompatActivity {
         return super.dispatchTouchEvent(ev);
     }
 
-    private void hideKeyboard() {
+    public void hideKeyboard() {
         InputMethodManager imm = (InputMethodManager) getSystemService(Activity.INPUT_METHOD_SERVICE);
         View view = getCurrentFocus();
         if (view == null) {
@@ -332,7 +436,7 @@ public class MainActivity extends AppCompatActivity {
         imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
     }
 
-    private void onAdLoad() {
+    public void onAdLoad() {
         MobileAds.initialize(this, new OnInitializationCompleteListener() {
             @Override
             public void onInitializationComplete(InitializationStatus initializationStatus) {
@@ -367,7 +471,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     // Integer type sorting example
-    private final static Comparator<Store> sortStoreName = new Comparator<Store>() {
+    public final static Comparator<Store> sortStoreName = new Comparator<Store>() {
 
         @Override
         public int compare(Store o1, Store o2) {
@@ -375,3 +479,28 @@ public class MainActivity extends AppCompatActivity {
         }
     };
 }
+
+/* --------------------------데이터 추가 구문-------------------------- */
+//        String insUrl = store.insUrl;
+//        String profile = store.profile;
+//        String sellUrl = store.sellUrl;
+//        String storeName = store.storeName;
+//
+//        Map<String, Object> user = new HashMap<>();
+//        user.put("insUrl", insUrl);
+//        user.put("profile", profile);
+//        user.put("sellUrl", sellUrl);
+//        user.put("storeName", storeName);
+//
+//        db.collection("store")
+//                .add(user)
+//                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+//                    @Override
+//                    public void onSuccess(DocumentReference documentReference) {
+//                    }
+//                })
+//                .addOnFailureListener(new OnFailureListener() {
+//                    @Override
+//                    public void onFailure(@NonNull Exception e) {
+//                    }
+//                });

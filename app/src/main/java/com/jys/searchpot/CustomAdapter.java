@@ -54,7 +54,6 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.CustomView
                 .error(R.drawable.ic_list_0)
                 .override(200,200)
                 .circleCrop()
-                .thumbnail(0.1f)
                 .into(holder.iv_profrile);
 
         holder.tv_storeName.setText(arrayList.get(position).getStoreName());

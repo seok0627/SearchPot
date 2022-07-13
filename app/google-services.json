@@ -81,6 +81,14 @@
           }
         },
         {
+          "client_id": "563152028465-qh7j1lh0gbl7paabompuhu5bj4re58mv.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.jys.searchpot",
+            "certificate_hash": "6b22a8cf822bb6061639dc0370cc3355c592b243"
+          }
+        },
+        {
           "client_id": "563152028465-55ofmqpphl9615uctv16a6cpbg1i65ir.apps.googleusercontent.com",
           "client_type": 3
         }
