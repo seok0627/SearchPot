@@ -26,10 +26,10 @@ import java.util.List;
 
 public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.CustomViewHolder> {
 
-    private ArrayList<Store> arrayList;
-    private Context context;
-    private String storeName = "";
-    private long backKeyPressedTime = 0;
+    public ArrayList<Store> arrayList;
+    public Context context;
+    public String storeName = "";
+    public long backKeyPressedTime = 0;
 
     public CustomAdapter(ArrayList<Store> arrayList, Context context) {
         this.arrayList = arrayList;
@@ -127,7 +127,7 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.CustomView
                             e.printStackTrace();
                         }
                     } else {
-                        Snackbar.make(itemView, "등록된 인스타 URL이 없습니다.", 800).show();
+                        Snackbar.make(itemView, "등록된 인스타 URL이 없어요.", 800).show();
 //                        Toast.makeText(context, "", Toast.LENGTH_SHORT).show();
                     }
 
@@ -147,7 +147,7 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.CustomView
                             e.printStackTrace();
                         }
                     } else {
-                        Snackbar.make(itemView, "등록된 스토어 URL이 없습니다.", 800).show();
+                        Snackbar.make(itemView, "등록된 스토어 URL이 없어요.", 800).show();
                     }
                 }
             });

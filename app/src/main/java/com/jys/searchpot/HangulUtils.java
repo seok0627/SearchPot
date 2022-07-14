@@ -1,7 +1,7 @@
 package com.jys.searchpot;
 
 public class HangulUtils {
-    private static String toHexString(int decimal) {
+    public static String toHexString(int decimal) {
         Long intDec = Long.valueOf(decimal);
         return Long.toHexString(intDec);
     }

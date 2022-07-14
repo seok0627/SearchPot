@@ -9,17 +9,19 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.core.app.ActivityCompat;
+
 public class CustomDialog extends Dialog implements View.OnClickListener{
 
-    private Button btn_cancel;
-    private Button btn_ok;
-    private EditText et_name;
-    private EditText et_ins;
-    private EditText et_store;
-    private TextView tv_notice;
+    public Button btn_cancel;
+    public Button btn_ok;
+    public EditText et_name;
+    public EditText et_ins;
+    public EditText et_store;
+    public TextView tv_notice;
 
-    private CustomDialogListener customDialogListener;
-    private Context context;
+    public CustomDialogListener customDialogListener;
+    public Context context;
 
     public CustomDialog(Context context) {
         super(context);
@@ -37,7 +39,7 @@ public class CustomDialog extends Dialog implements View.OnClickListener{
     }
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.custom_dialog);
 
@@ -70,5 +72,11 @@ public class CustomDialog extends Dialog implements View.OnClickListener{
                 cancel();
                 break;
         }
+    }
+
+    //뒤로가기 버튼 클릭시 앱 종료
+    @Override
+    public void onBackPressed() {
+        dismiss();
     }
 }

@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.os.Handler;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -56,12 +57,6 @@ import com.google.firebase.firestore.MetadataChanges;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.io.File;
-import java.io.FileOutputStream;
 import java.text.Collator;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -84,7 +79,6 @@ public class MainActivity extends AppCompatActivity {
     public TextView m_tv_cnt;
     public AdView mAdView;
     public SwipeRefreshLayout layoutSwipeRefresh;
-    public FileOutputStream outputStream;
 
     public int cnt = 0;
     public long backKeyPressedTime = 0;
@@ -105,7 +99,7 @@ public class MainActivity extends AppCompatActivity {
             "ㅊ", "ㅋ", "ㅌ", "ㅍ", "ㅎ"};
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
@@ -243,6 +237,10 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void onOkClicked(String name, String ins, String store) {
 
+                        String storeName = name;
+                        String insUrl = ins;
+                        String storeUrl = store;
+
                         databaseNewReference.addListenerForSingleValueEvent(new ValueEventListener() {
                             @Override
                             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -262,11 +260,11 @@ public class MainActivity extends AppCompatActivity {
                                 }
 
                                 if (overlapFlag == true) {
-                                    Toast.makeText(MainActivity.this, "이미 등록 요청된 브랜드명입니다.", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(MainActivity.this, "이미 등록 요청된 브랜드명이에요", Toast.LENGTH_SHORT).show();
                                 } else if (alreadyFlag == true) {
-                                    Toast.makeText(MainActivity.this, "이미 등록 완료된 브랜드명입니다.", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(MainActivity.this, "이미 등록 되어있는 브랜드명이에요.", Toast.LENGTH_SHORT).show();
                                 } else {
-                                    NewStore newStore = new NewStore(name, ins, store);
+                                    NewStore newStore = new NewStore(storeName, insUrl, storeUrl);
                                     databaseNewReference.push().setValue(newStore);
                                     Toast.makeText(MainActivity.this, "브랜드 등록 요청이 완료됐어요.", Toast.LENGTH_SHORT).show();
                                     dialog.dismiss();

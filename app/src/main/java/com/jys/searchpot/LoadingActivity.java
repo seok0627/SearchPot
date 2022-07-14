@@ -23,7 +23,7 @@ public class LoadingActivity extends AppCompatActivity {
     LinearLayout lay_loading;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_loading);
 
@@ -82,8 +82,14 @@ public class LoadingActivity extends AppCompatActivity {
 
             //연결되어 있으면 로딩화면에서 메인화면으로 넘어감
         } else {
+            onVersionCheck();
             Loadingstart();
         }
+    }
+
+    public void onVersionCheck() {
+        
+
     }
 
     public void Loadingstart() {
