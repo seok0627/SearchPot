@@ -21,6 +21,7 @@
         <entry key="..\:/SearchPot/app/src/main/res/drawable/ic_menu_mail.xml" value="0.249" />
         <entry key="..\:/SearchPot/app/src/main/res/drawable/ic_menu_search.xml" value="0.249" />
         <entry key="..\:/SearchPot/app/src/main/res/drawable/ic_menu_share.xml" value="0.2875" />
+        <entry key="..\:/SearchPot/app/src/main/res/drawable/ic_menu_version.xml" value="0.274" />
         <entry key="..\:/SearchPot/app/src/main/res/drawable/ic_searchpot_background.xml" value="0.265" />
         <entry key="..\:/SearchPot/app/src/main/res/drawable/ic_settings_black_24dp.xml" value="0.2713541666666667" />
         <entry key="..\:/SearchPot/app/src/main/res/drawable/launch_transparent.xml" value="0.274" />
@@ -36,6 +37,7 @@
         <entry key="..\:/SearchPot/app/src/main/res/layout/custom_dialog.xml" value="0.22" />
         <entry key="..\:/SearchPot/app/src/main/res/layout/dialog_progress.xml" value="0.2552083333333333" />
         <entry key="..\:/SearchPot/app/src/main/res/layout/list_item.xml" value="0.4652455977757183" />
+        <entry key="..\:/SearchPot/app/src/main/res/layout/notice_dialog.xml" value="0.33" />
         <entry key="..\:/SearchPot/app/src/main/res/layout/toolbar.xml" value="0.19947916666666668" />
         <entry key="..\:/SearchPot/app/src/main/res/menu/activity_main_drawer.xml" value="0.2713541666666667" />
         <entry key="..\:/SearchPot/app/src/main/res/menu/main.xml" value="0.5" />
@@ -44,6 +46,7 @@
         <entry key="..\:/SearchPot/app/src/main/res/mipmap-anydpi-v26/ic_launcher_round.xml" value="0.267" />
         <entry key="..\:/SearchPot/app/src/main/res/mipmap-anydpi-v26/ic_searchpot.xml" value="0.267" />
         <entry key="..\:/SearchPot/app/src/main/res/mipmap-anydpi-v26/ic_searchpot_round.xml" value="0.199" />
+        <entry key="..\:/SearchPot/app/src/main/res/xml/remote_config_defaults.xml" value="0.246875" />
         <entry key="..\:/Users/dydtj/AndroidStudioProjects/SearchPot/app/src/main/res/drawable/bg_round_bottom_left.xml" value="0.277" />
         <entry key="..\:/Users/dydtj/AndroidStudioProjects/SearchPot/app/src/main/res/drawable/bg_round_bottom_right.xml" value="0.277" />
         <entry key="..\:/Users/dydtj/AndroidStudioProjects/SearchPot/app/src/main/res/drawable/bg_round_popup.xml" value="0.277" />

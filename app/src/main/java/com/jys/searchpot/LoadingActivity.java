@@ -9,13 +9,12 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.app.ActivityCompat;
+
 
 public class LoadingActivity extends AppCompatActivity {
 
@@ -66,7 +65,7 @@ public class LoadingActivity extends AppCompatActivity {
 
         //연결되어있지 않으면
         if (!isConnected) {
-            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.DialogTheme);
             builder.setCancelable(false);
 
             builder.setTitle("네트워크 오류").setMessage("네크워크가 원활하지 않습니다.\n네트워크 연결을 확인해주세요.");
@@ -80,16 +79,9 @@ public class LoadingActivity extends AppCompatActivity {
             });
             builder.show();
 
-            //연결되어 있으면 로딩화면에서 메인화면으로 넘어감
         } else {
-            onVersionCheck();
             Loadingstart();
         }
-    }
-
-    public void onVersionCheck() {
-        
-
     }
 
     public void Loadingstart() {

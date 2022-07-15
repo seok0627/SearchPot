@@ -3,11 +3,16 @@ package com.jys.searchpot;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.StrictMode;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -25,6 +30,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -70,21 +76,23 @@ public class MainActivity extends AppCompatActivity {
     public RecyclerView.Adapter adapter;
     public RecyclerView.LayoutManager layoutManager;
     public ArrayList<Store> arrayList;
+    public ArrayList<Store> arrayNewList;
     public FirebaseDatabase database;
     public FirebaseFirestore db;
     public DatabaseReference databaseReference;
     public DatabaseReference databaseNewReference;
+    public DatabaseReference databaseVersionReference;
     public LinearLayout m_lay_edit;
     public EditText m_et_search;
     public TextView m_tv_cnt;
     public AdView mAdView;
     public SwipeRefreshLayout layoutSwipeRefresh;
+    public String serverVersion = "";
+    public String appVersion = "";
 
     public int cnt = 0;
     public long backKeyPressedTime = 0;
     public boolean overlapFlag, alreadyFlag = false;
-    public String jsonData = "";
-
     Button button[] = new Button[20];
     Integer[] Rid_button =
             {R.id.btn_0, R.id.btn_1, R.id.btn_2, R.id.btn_3, R.id.btn_4,       //전체, ㄱ, ㄲ, ㄴ, ㄷ
@@ -105,10 +113,12 @@ public class MainActivity extends AppCompatActivity {
 
         //상단바 문구 지정
         getSupportActionBar().setTitle("");
+
         onInit();
 //        onAdLoad();
         onData("");
         onBtnAllSel();
+        onServerVersionCheck();
 
         m_et_search.addTextChangedListener(new TextWatcher() {
             @Override
@@ -159,10 +169,12 @@ public class MainActivity extends AppCompatActivity {
         layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
         arrayList = new ArrayList<>(); // User 객체를 담을 어레이 리스트 (어댑터쪽으로)
+        arrayNewList = new ArrayList<>();
         database = FirebaseDatabase.getInstance(); // 파이어베이스 데이터베이스 연동
         db = FirebaseFirestore.getInstance();
         databaseReference = database.getReference("Store"); // 파이어베이스 STORE DB 테이블 연결
         databaseNewReference = database.getReference("NewStore");
+        databaseVersionReference = database.getReference("AppVersion");
         layoutSwipeRefresh = findViewById(R.id.swipeRefresh);
 
         for (int i = 0; i <= 19; i++) {
@@ -199,12 +211,23 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
+
+            case R.id.version:
+                PackageInfo pi = null;
+                try {
+                    pi = getPackageManager().getPackageInfo(getPackageName(), 0);
+                    Toast.makeText(MainActivity.this, "설치된 버전 : " + pi.versionName, Toast.LENGTH_LONG).show();
+                } catch (PackageManager.NameNotFoundException e) {
+                    e.printStackTrace();
+                }
+
+                break;
+
             case R.id.share:
                 Intent share = new Intent(Intent.ACTION_SEND);
                 share.setType("text/plan");
                 share.putExtra(Intent.EXTRA_TEXT, "https://play.google.com/store/apps/details?id=com.jys.searchpot");
                 startActivity(Intent.createChooser(share, "공유하기"));
-
                 break;
 
             case R.id.mail:
@@ -229,6 +252,8 @@ public class MainActivity extends AppCompatActivity {
                 break;
 
             case R.id.add:
+                onNewData();
+
                 CustomDialog dialog = new CustomDialog(this);
                 dialog.setCancelable(false);
                 dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
@@ -236,64 +261,34 @@ public class MainActivity extends AppCompatActivity {
                 dialog.setDialogListener(new CustomDialog.CustomDialogListener() {
                     @Override
                     public void onOkClicked(String name, String ins, String store) {
+                        overlapFlag = false; //브랜드 [요청]이 이미 있는 경우
+                        alreadyFlag = false; //브랜드 [등록]이 이미 되어있는 경우
 
-                        String storeName = name;
-                        String insUrl = ins;
-                        String storeUrl = store;
 
-                        databaseNewReference.addListenerForSingleValueEvent(new ValueEventListener() {
-                            @Override
-                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                                overlapFlag = false;
-                                alreadyFlag = false;
-
-                                for (DataSnapshot snapshot : dataSnapshot.getChildren()) { //반복문으로 데이터 List 추출
-                                    Store store = snapshot.getValue(Store.class); //만들어뒀던 store 객체에 데이터를 담음
-
-                                    for (int i = 0; i < arrayList.size(); i++) {
-                                        if (name.equals(store.storeName)) {
-                                            overlapFlag = true;
-                                        } else if (name.equals(arrayList.get(i).storeName)) {
-                                            alreadyFlag = true;
-                                        }
-                                    }
-                                }
-
-                                if (overlapFlag == true) {
-                                    Toast.makeText(MainActivity.this, "이미 등록 요청된 브랜드명이에요", Toast.LENGTH_SHORT).show();
-                                } else if (alreadyFlag == true) {
-                                    Toast.makeText(MainActivity.this, "이미 등록 되어있는 브랜드명이에요.", Toast.LENGTH_SHORT).show();
-                                } else {
-                                    NewStore newStore = new NewStore(storeName, insUrl, storeUrl);
-                                    databaseNewReference.push().setValue(newStore);
-                                    Toast.makeText(MainActivity.this, "브랜드 등록 요청이 완료됐어요.", Toast.LENGTH_SHORT).show();
-                                    dialog.dismiss();
-                                }
+                        for (int i = 0; i < arrayNewList.size(); i++) {
+                            if (name.equals(arrayNewList.get(i).storeName)) {
+                                overlapFlag = true;
+                                break;
                             }
+                        }
 
-                            @Override
-                            public void onCancelled(@NonNull DatabaseError databaseError) {
+                        for (int i = 0; i < arrayList.size(); i++) {
+                            if (name.equals(arrayList.get(i).storeName)) {
+                                alreadyFlag = true;
+                                break;
                             }
-                        });
+                        }
 
-                        /*firestore에 등록해야하는 경우*/
-//                        Map<String, Object> user = new HashMap<>();
-//                        user.put("insUrl", ins);
-//                        user.put("sellUrl", store);
-//                        user.put("storeName", name);
-//
-//                        db.collection("newStore")
-//                                .add(user)
-//                                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-//                                    @Override
-//                                    public void onSuccess(DocumentReference documentReference) {
-//                                    }
-//                                })
-//                                .addOnFailureListener(new OnFailureListener() {
-//                                    @Override
-//                                    public void onFailure(@NonNull Exception e) {
-//                                    }
-//                                });
+                        if (overlapFlag == true) {
+                            Toast.makeText(MainActivity.this, "이미 등록 요청된적이 있는 브랜드명이에요", Toast.LENGTH_SHORT).show();
+                        } else if (alreadyFlag == true) {
+                            Toast.makeText(MainActivity.this, "이미 등록 되어있는 브랜드예요.", Toast.LENGTH_SHORT).show();
+                        } else {
+                            NewStore newStore = new NewStore(name, ins, store);
+                            databaseNewReference.push().setValue(newStore);
+                            Toast.makeText(MainActivity.this, "브랜드 등록 요청이 완료됐어요.", Toast.LENGTH_SHORT).show();
+                            dialog.dismiss();
+                        }
                     }
                 });
                 dialog.show();
@@ -332,6 +327,24 @@ public class MainActivity extends AppCompatActivity {
     public void onData(String searchText) {
         RealtimeDatabase(searchText);
         //FirestoreDatabase(searchText);
+    }
+
+    private void onNewData() {
+        databaseNewReference.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                arrayNewList.clear();
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()) { //반복문으로 데이터 List 추출
+                    Store store = snapshot.getValue(Store.class); //만들어뒀던 store 객체에 데이터를 담음
+                    arrayNewList.add(store);
+                    Collections.sort(arrayNewList, sortStoreName);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+            }
+        });
     }
 
     public void RealtimeDatabase(String searchText) {
@@ -476,6 +489,49 @@ public class MainActivity extends AppCompatActivity {
             return Collator.getInstance().compare(o1.storeName, o2.storeName);
         }
     };
+
+    public void onServerVersionCheck() {
+        PackageInfo pi = null;
+        try {
+            pi = getPackageManager().getPackageInfo(getPackageName(), 0);
+            appVersion = pi.versionName;
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
+
+        databaseVersionReference.child("AppVersion").child("versionName").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                serverVersion = dataSnapshot.getValue(String.class);
+
+                if (!serverVersion.equals(appVersion)) {
+                    NoticeDialog dialog = new NoticeDialog(MainActivity.this);
+                    dialog.setCancelable(false);
+                    dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                    dialog.setDialogListener(new NoticeDialog.NoticeDialogListener() {
+                        @Override
+                        public void onOkClicked() {
+                            Intent intent = new Intent(Intent.ACTION_VIEW);
+                            intent.setData(Uri.parse("market://details?id=" + getPackageName()));
+                            startActivity(intent);
+
+                            //다이얼로그 종료 후
+                            dialog.dismiss();
+                            //액티비티 종료 후
+                            ActivityCompat.finishAffinity(MainActivity.this);
+                            //프로세스 종료
+                            finish();
+                        }
+                    });
+                    dialog.show();
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+            }
+        });
+    }
 }
 
 /* --------------------------데이터 추가 구문-------------------------- */
