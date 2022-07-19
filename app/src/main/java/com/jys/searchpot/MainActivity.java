@@ -216,7 +216,9 @@ public class MainActivity extends AppCompatActivity {
                 PackageInfo pi = null;
                 try {
                     pi = getPackageManager().getPackageInfo(getPackageName(), 0);
-                    Toast.makeText(MainActivity.this, "설치된 버전 : " + pi.versionName, Toast.LENGTH_LONG).show();
+                    setCustomToast(this,"설치된 버전 : " + pi.versionName);
+                    //Toast.makeText(MainActivity.this, "설치된 버전 : " + pi.versionName, Toast.LENGTH_LONG).show();
+
                 } catch (PackageManager.NameNotFoundException e) {
                     e.printStackTrace();
                 }
@@ -280,13 +282,16 @@ public class MainActivity extends AppCompatActivity {
                         }
 
                         if (overlapFlag == true) {
-                            Toast.makeText(MainActivity.this, "이미 등록 요청된적이 있는 브랜드명이에요", Toast.LENGTH_SHORT).show();
+                            setCustomToast(MainActivity.this,"이미 등록 요청된적이 있는 브랜드명이에요.");
+                            //Toast.makeText(MainActivity.this, "이미 등록 요청된적이 있는 브랜드명이에요", Toast.LENGTH_SHORT).show();
                         } else if (alreadyFlag == true) {
-                            Toast.makeText(MainActivity.this, "이미 등록 되어있는 브랜드예요.", Toast.LENGTH_SHORT).show();
+                            setCustomToast(MainActivity.this,"이미 등록 되어있는 브랜드예요.");
+                            //Toast.makeText(MainActivity.this, "이미 등록 되어있는 브랜드예요.", Toast.LENGTH_SHORT).show();
                         } else {
                             NewStore newStore = new NewStore(name, ins, store);
                             databaseNewReference.push().setValue(newStore);
-                            Toast.makeText(MainActivity.this, "브랜드 등록 요청이 완료됐어요.", Toast.LENGTH_SHORT).show();
+                            setCustomToast(MainActivity.this,"브랜드 등록 요청이 완료됐어요.");
+                            //Toast.makeText(MainActivity.this, "브랜드 등록 요청이 완료됐어요.", Toast.LENGTH_SHORT).show();
                             dialog.dismiss();
                         }
                     }
@@ -419,7 +424,8 @@ public class MainActivity extends AppCompatActivity {
                                 }
                             }
                         } else {
-                            Toast.makeText(MainActivity.this, "잠시 후 다시 시도해주세요.", Toast.LENGTH_SHORT).show();
+                            setCustomToast(MainActivity.this,"잠시 후 다시 시도해주세요.");
+                            //Toast.makeText(MainActivity.this, "잠시 후 다시 시도해주세요.", Toast.LENGTH_SHORT).show();
                         }
 
                         adapter.notifyDataSetChanged(); // 리스트 저장 및 새로고침
@@ -469,7 +475,8 @@ public class MainActivity extends AppCompatActivity {
         } else {
             if (System.currentTimeMillis() > backKeyPressedTime + 2000) {
                 backKeyPressedTime = System.currentTimeMillis();
-                Toast.makeText(this, "\'뒤로\' 버튼을 한번 더 누르시면 종료됩니다.", Toast.LENGTH_SHORT).show();
+                setCustomToast(this,"\'뒤로\' 버튼을 한번 더 누르시면\n앱이 종료됩니다.");
+//                Toast.makeText(this, "\'뒤로\' 버튼을 한번 더 누르시면 종료됩니다.", Toast.LENGTH_SHORT).show();
                 return;
             }
             if (System.currentTimeMillis() <= backKeyPressedTime + 2000) {
@@ -531,6 +538,28 @@ public class MainActivity extends AppCompatActivity {
             public void onCancelled(@NonNull DatabaseError databaseError) {
             }
         });
+    }
+
+    public static void setCustomToast(Context context, String msg) {
+        TextView tvToastMsg = new TextView(context);
+        tvToastMsg.setText(msg);
+        tvToastMsg.setBackgroundResource(R.drawable.bg_round_toast);
+        tvToastMsg.setTextColor(Color.WHITE);
+        tvToastMsg.setTextSize(18);
+        tvToastMsg.setPadding(50,30,50,30);
+        tvToastMsg.setFontFeatureSettings(String.valueOf(R.font.font_3));
+
+        final Toast toastMsg = Toast.makeText(context, "", Toast.LENGTH_SHORT);
+        toastMsg.setView(tvToastMsg);
+
+        toastMsg.show();
+        new Handler().postDelayed(new Runnable() {
+
+            @Override
+            public void run() {
+                toastMsg.cancel();
+            }
+        }, 1500);
     }
 }
 

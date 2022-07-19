@@ -23,17 +23,20 @@
             <item
                 android:id="@+id/mail"
                 android:icon="@drawable/ic_menu_mail"
-                android:title="　문의하기" />
+                android:title="　문의하기"
+                />
 
             <item
                 android:id="@+id/share"
                 android:icon="@drawable/ic_menu_share"
-                android:title="　공유하기" />
+                android:title="　공유하기"
+                />
 
             <item
                 android:id="@+id/version"
                 android:icon="@drawable/ic_menu_version"
-                android:title="　Version" />
+                android:title="　Version"
+                />
         </menu>
     </item>
 </menu>

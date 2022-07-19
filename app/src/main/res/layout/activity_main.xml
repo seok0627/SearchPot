@@ -27,7 +27,8 @@
             android:singleLine="true"
             android:lines="1"
             android:imeOptions="actionSearch"
-            android:background="@drawable/bg_round_gray"/>
+            android:background="@drawable/bg_round_gray"
+            android:fontFamily="@font/font_3"/>
     </LinearLayout>
 
     <HorizontalScrollView
@@ -56,7 +57,8 @@
                 android:textSize="15dp"
                 android:textColor="@color/white"
                 android:singleLine="true"
-                android:maxLines="1"/>
+                android:maxLines="1"
+                />
             <Button
                 android:id="@+id/btn_1"
                 android:layout_width="35dp"
@@ -66,7 +68,8 @@
                 android:gravity="center"
                 android:text="ㄱ"
                 android:textSize="15dp"
-                android:textColor="@color/black"/>
+                android:textColor="@color/black"
+                />
             <Button
                 android:id="@+id/btn_2"
                 android:layout_width="35dp"
@@ -76,7 +79,8 @@
                 android:gravity="center"
                 android:text="ㄲ"
                 android:textSize="15dp"
-                android:textColor="@color/black"/>
+                android:textColor="@color/black"
+                />
             <Button
                 android:id="@+id/btn_3"
                 android:layout_width="35dp"
@@ -86,7 +90,8 @@
                 android:gravity="center"
                 android:text="ㄴ"
                 android:textSize="15dp"
-                android:textColor="@color/black"/>
+                android:textColor="@color/black"
+                />
             <Button
                 android:id="@+id/btn_4"
                 android:layout_width="35dp"
@@ -96,7 +101,8 @@
                 android:gravity="center"
                 android:text="ㄷ"
                 android:textSize="15dp"
-                android:textColor="@color/black"/>
+                android:textColor="@color/black"
+                />
             <Button
                 android:id="@+id/btn_5"
                 android:layout_width="35dp"
@@ -106,7 +112,8 @@
                 android:gravity="center"
                 android:text="ㄸ"
                 android:textSize="15dp"
-                android:textColor="@color/black"/>
+                android:textColor="@color/black"
+                />
             <Button
                 android:id="@+id/btn_6"
                 android:layout_width="35dp"
@@ -116,7 +123,8 @@
                 android:gravity="center"
                 android:text="ㄹ"
                 android:textSize="15dp"
-                android:textColor="@color/black"/>
+                android:textColor="@color/black"
+                />
             <Button
                 android:id="@+id/btn_7"
                 android:layout_width="35dp"
@@ -126,7 +134,8 @@
                 android:gravity="center"
                 android:text="ㅁ"
                 android:textSize="15dp"
-                android:textColor="@color/black"/>
+                android:textColor="@color/black"
+                />
             <Button
                 android:id="@+id/btn_8"
                 android:layout_width="35dp"
@@ -136,7 +145,8 @@
                 android:gravity="center"
                 android:text="ㅂ"
                 android:textSize="15dp"
-                android:textColor="@color/black"/>
+                android:textColor="@color/black"
+                />
             <Button
                 android:id="@+id/btn_9"
                 android:layout_width="35dp"
@@ -146,7 +156,8 @@
                 android:gravity="center"
                 android:text="ㅃ"
                 android:textSize="15dp"
-                android:textColor="@color/black"/>
+                android:textColor="@color/black"
+                />
             <Button
                 android:id="@+id/btn_10"
                 android:layout_width="35dp"
@@ -156,7 +167,8 @@
                 android:gravity="center"
                 android:text="ㅅ"
                 android:textSize="15dp"
-                android:textColor="@color/black"/>
+                android:textColor="@color/black"
+                />
             <Button
                 android:id="@+id/btn_11"
                 android:layout_width="35dp"
@@ -166,7 +178,8 @@
                 android:gravity="center"
                 android:text="ㅆ"
                 android:textSize="15dp"
-                android:textColor="@color/black"/>
+                android:textColor="@color/black"
+                />
             <Button
                 android:id="@+id/btn_12"
                 android:layout_width="35dp"
@@ -176,7 +189,8 @@
                 android:gravity="center"
                 android:text="ㅇ"
                 android:textSize="15dp"
-                android:textColor="@color/black"/>
+                android:textColor="@color/black"
+                />
             <Button
                 android:id="@+id/btn_13"
                 android:layout_width="35dp"
@@ -186,7 +200,8 @@
                 android:gravity="center"
                 android:text="ㅈ"
                 android:textSize="15dp"
-                android:textColor="@color/black"/>
+                android:textColor="@color/black"
+                />
             <Button
                 android:id="@+id/btn_14"
                 android:layout_width="35dp"
@@ -196,7 +211,8 @@
                 android:gravity="center"
                 android:text="ㅉ"
                 android:textSize="15dp"
-                android:textColor="@color/black"/>
+                android:textColor="@color/black"
+                />
             <Button
                 android:id="@+id/btn_15"
                 android:layout_width="35dp"
@@ -206,7 +222,8 @@
                 android:gravity="center"
                 android:text="ㅊ"
                 android:textSize="15dp"
-                android:textColor="@color/black"/>
+                android:textColor="@color/black"
+                />
             <Button
                 android:id="@+id/btn_16"
                 android:layout_width="35dp"
@@ -216,7 +233,8 @@
                 android:gravity="center"
                 android:text="ㅋ"
                 android:textSize="15dp"
-                android:textColor="@color/black"/>
+                android:textColor="@color/black"
+                />
             <Button
                 android:id="@+id/btn_17"
                 android:layout_width="35dp"
@@ -226,7 +244,8 @@
                 android:gravity="center"
                 android:text="ㅌ"
                 android:textSize="15dp"
-                android:textColor="@color/black"/>
+                android:textColor="@color/black"
+                />
             <Button
                 android:id="@+id/btn_18"
                 android:layout_width="35dp"
@@ -236,7 +255,8 @@
                 android:gravity="center"
                 android:text="ㅍ"
                 android:textSize="15dp"
-                android:textColor="@color/black"/>
+                android:textColor="@color/black"
+                />
             <Button
                 android:id="@+id/btn_19"
                 android:layout_width="35dp"
@@ -246,7 +266,8 @@
                 android:gravity="center"
                 android:text="ㅎ"
                 android:textSize="15dp"
-                android:textColor="@color/black"/>
+                android:textColor="@color/black"
+                />
 
         </LinearLayout>
 

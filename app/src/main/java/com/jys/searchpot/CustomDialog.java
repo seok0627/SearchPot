@@ -23,6 +23,8 @@ public class CustomDialog extends Dialog implements View.OnClickListener{
     public CustomDialogListener customDialogListener;
     public Context context;
 
+    public MainActivity mainActivity;
+
     public CustomDialog(Context context) {
         super(context);
         this.context = context;
@@ -60,7 +62,8 @@ public class CustomDialog extends Dialog implements View.OnClickListener{
             case R.id.btn_ok:
                 //각각의 변수에 EidtText에서 가져온 값을 저장
                 if(et_name.getText().toString().length() < 1){
-                    Toast.makeText(context, "브랜드명을 입력해주세요.", Toast.LENGTH_SHORT).show();
+                    mainActivity.setCustomToast(context,"브랜드명을 입력해주세요.");
+                    //Toast.makeText(context, "브랜드명을 입력해주세요.", Toast.LENGTH_SHORT).show();
                 }else{
                     String name = et_name.getText().toString();
                     String ins = et_ins.getText().toString();
