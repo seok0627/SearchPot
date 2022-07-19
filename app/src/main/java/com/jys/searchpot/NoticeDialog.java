@@ -2,6 +2,7 @@ package com.jys.searchpot;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -41,7 +42,6 @@ public class NoticeDialog extends Dialog implements View.OnClickListener{
         btn_cancel.setOnClickListener(this);
         btn_ok = (Button) findViewById(R.id.btn_ok);
         btn_ok.setOnClickListener(this);
-
     }
 
     @Override

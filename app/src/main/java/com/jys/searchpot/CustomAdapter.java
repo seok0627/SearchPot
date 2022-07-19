@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -49,6 +50,12 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.CustomView
     @Override
     public void onBindViewHolder(@NonNull CustomViewHolder holder, int position) {
 
+        if(position % 2 == 1) {
+            holder.lay_item.setBackgroundResource(R.color.gray);
+        }else{
+            holder.lay_item.setBackgroundResource(R.color.white);
+        }
+
         Glide.with(holder.itemView)
                 .load(arrayList.get(position).getProfile())
                 .error(R.drawable.ic_list_0)
@@ -79,6 +86,7 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.CustomView
     }
 
     public class CustomViewHolder extends RecyclerView.ViewHolder {
+        LinearLayout lay_item;
         ImageView iv_profrile;
         TextView tv_storeName;
         Button btn_ins;
@@ -89,6 +97,7 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.CustomView
 
         public CustomViewHolder(@NonNull View itemView) {
             super(itemView);
+            this.lay_item = itemView.findViewById(R.id.lay_item);
             this.iv_profrile = itemView.findViewById(R.id.iv_profile);
             this.tv_storeName = itemView.findViewById(R.id.tv_storeName);
             this.btn_ins = itemView.findViewById(R.id.btn_ins);

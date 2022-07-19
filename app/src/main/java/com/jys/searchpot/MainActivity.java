@@ -213,14 +213,7 @@ public class MainActivity extends AppCompatActivity {
         switch (item.getItemId()) {
 
             case R.id.version:
-                PackageInfo pi = null;
-                try {
-                    pi = getPackageManager().getPackageInfo(getPackageName(), 0);
-                    setCustomToast(this,"설치된 버전 : " + pi.versionName);
-                    //Toast.makeText(MainActivity.this, "설치된 버전 : " + pi.versionName, Toast.LENGTH_LONG).show();
-                } catch (PackageManager.NameNotFoundException e) {
-                    e.printStackTrace();
-                }
+                setCustomToast(this, "설치된 버전 : " + appVersion);
                 break;
 
             case R.id.review:
@@ -270,7 +263,6 @@ public class MainActivity extends AppCompatActivity {
                         overlapFlag = false; //브랜드 [요청]이 이미 있는 경우
                         alreadyFlag = false; //브랜드 [등록]이 이미 되어있는 경우
 
-
                         for (int i = 0; i < arrayNewList.size(); i++) {
                             if (name.equals(arrayNewList.get(i).storeName)) {
                                 overlapFlag = true;
@@ -286,15 +278,15 @@ public class MainActivity extends AppCompatActivity {
                         }
 
                         if (overlapFlag == true) {
-                            setCustomToast(MainActivity.this,"이미 등록 요청된적이 있는 브랜드명이에요.");
+                            setCustomToast(MainActivity.this, "이미 등록 요청된적이 있는 브랜드명이에요.");
                             //Toast.makeText(MainActivity.this, "이미 등록 요청된적이 있는 브랜드명이에요", Toast.LENGTH_SHORT).show();
                         } else if (alreadyFlag == true) {
-                            setCustomToast(MainActivity.this,"이미 등록 되어있는 브랜드예요.");
+                            setCustomToast(MainActivity.this, "이미 등록 되어있는 브랜드예요.");
                             //Toast.makeText(MainActivity.this, "이미 등록 되어있는 브랜드예요.", Toast.LENGTH_SHORT).show();
                         } else {
                             NewStore newStore = new NewStore(name, ins, store);
                             databaseNewReference.push().setValue(newStore);
-                            setCustomToast(MainActivity.this,"브랜드 등록 요청이 완료됐어요.");
+                            setCustomToast(MainActivity.this, "브랜드 등록 요청이 완료됐어요.");
                             //Toast.makeText(MainActivity.this, "브랜드 등록 요청이 완료됐어요.", Toast.LENGTH_SHORT).show();
                             dialog.dismiss();
                         }
@@ -428,7 +420,7 @@ public class MainActivity extends AppCompatActivity {
                                 }
                             }
                         } else {
-                            setCustomToast(MainActivity.this,"잠시 후 다시 시도해주세요.");
+                            setCustomToast(MainActivity.this, "잠시 후 다시 시도해주세요.");
                             //Toast.makeText(MainActivity.this, "잠시 후 다시 시도해주세요.", Toast.LENGTH_SHORT).show();
                         }
 
@@ -479,7 +471,7 @@ public class MainActivity extends AppCompatActivity {
         } else {
             if (System.currentTimeMillis() > backKeyPressedTime + 2000) {
                 backKeyPressedTime = System.currentTimeMillis();
-                setCustomToast(this,"\'뒤로\' 버튼을 한번 더 누르시면\n앱이 종료됩니다.");
+                setCustomToast(this, "\'뒤로\' 버튼을 한번 더 누르시면\n앱이 종료됩니다.");
 //                Toast.makeText(this, "\'뒤로\' 버튼을 한번 더 누르시면 종료됩니다.", Toast.LENGTH_SHORT).show();
                 return;
             }
@@ -550,7 +542,7 @@ public class MainActivity extends AppCompatActivity {
         tvToastMsg.setBackgroundResource(R.drawable.bg_round_toast);
         tvToastMsg.setTextColor(Color.WHITE);
         tvToastMsg.setTextSize(18);
-        tvToastMsg.setPadding(50,30,50,30);
+        tvToastMsg.setPadding(50, 30, 50, 30);
         tvToastMsg.setFontFeatureSettings(String.valueOf(R.font.font_3));
 
         final Toast toastMsg = Toast.makeText(context, "", Toast.LENGTH_SHORT);
