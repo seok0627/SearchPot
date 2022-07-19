@@ -31,8 +31,8 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:gravity="center"
-            android:padding="25dp"
-            android:text="스토어에 새로운 업데이트 버전이 있어요.\n\n지금설치를 누르면 스토어로 이동해요."
+            android:padding="15dp"
+            android:text="새로운 업데이트 버전이 있어요.\n\n지금설치를 누르면 스토어로 이동해요."
             android:textSize="19dp"
             android:textStyle="bold" />
 

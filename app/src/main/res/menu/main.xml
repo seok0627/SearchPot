@@ -33,6 +33,12 @@
                 />
 
             <item
+                android:id="@+id/review"
+                android:icon="@drawable/ic_menu_review"
+                android:title="　응원댓글"
+                />
+
+            <item
                 android:id="@+id/version"
                 android:icon="@drawable/ic_menu_version"
                 android:title="　Version"

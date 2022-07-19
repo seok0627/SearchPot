@@ -218,11 +218,15 @@ public class MainActivity extends AppCompatActivity {
                     pi = getPackageManager().getPackageInfo(getPackageName(), 0);
                     setCustomToast(this,"설치된 버전 : " + pi.versionName);
                     //Toast.makeText(MainActivity.this, "설치된 버전 : " + pi.versionName, Toast.LENGTH_LONG).show();
-
                 } catch (PackageManager.NameNotFoundException e) {
                     e.printStackTrace();
                 }
+                break;
 
+            case R.id.review:
+                Intent intent = new Intent(Intent.ACTION_VIEW);
+                intent.setData(Uri.parse("market://details?id=" + getPackageName()));
+                startActivity(intent);
                 break;
 
             case R.id.share:
