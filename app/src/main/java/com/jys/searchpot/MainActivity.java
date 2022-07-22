@@ -7,6 +7,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.content.res.Resources;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
@@ -32,6 +33,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
+import androidx.appcompat.widget.ThemeUtils;
 import androidx.core.app.ActivityCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -72,6 +75,7 @@ import java.util.Map;
 
 public class MainActivity extends AppCompatActivity {
 
+    public LoadingActivity loadingActivity;
     public RecyclerView recyclerView;
     public RecyclerView.Adapter adapter;
     public RecyclerView.LayoutManager layoutManager;
@@ -83,12 +87,14 @@ public class MainActivity extends AppCompatActivity {
     public DatabaseReference databaseNewReference;
     public DatabaseReference databaseVersionReference;
     public LinearLayout m_lay_edit;
+    public LinearLayout m_lay_main;
     public EditText m_et_search;
     public TextView m_tv_cnt;
     public AdView mAdView;
     public SwipeRefreshLayout layoutSwipeRefresh;
     public String serverVersion = "";
-    public String appVersion = "";
+    public static String appVersion = "";
+    public boolean flag_theme = false;
 
     public int cnt = 0;
     public long backKeyPressedTime = 0;
@@ -109,12 +115,14 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        flag_theme = loadingActivity.flag_theme;
         setContentView(R.layout.activity_main);
 
         //상단바 문구 지정
         getSupportActionBar().setTitle("");
 
         onInit();
+        onSetTheme();
 //        onAdLoad();
         onData("");
         onBtnAllSel();
@@ -164,6 +172,7 @@ public class MainActivity extends AppCompatActivity {
         m_et_search = (EditText) findViewById(R.id.et_search);
         m_tv_cnt = (TextView) findViewById(R.id.tv_cnt);
         m_lay_edit = (LinearLayout) findViewById(R.id.lay_edit);
+        m_lay_main = (LinearLayout) findViewById(R.id.lay_main);
         recyclerView = findViewById(R.id.recyclerView);
         recyclerView.setHasFixedSize(true); // 리사이클러뷰 기존성능 강화
         layoutManager = new LinearLayoutManager(this);
@@ -179,6 +188,12 @@ public class MainActivity extends AppCompatActivity {
 
         for (int i = 0; i <= 19; i++) {
             button[i] = (Button) findViewById(Rid_button[i]);
+            if(flag_theme){
+                button[i].setBackgroundResource(R.drawable.bg_round_white_dark);
+            }
+            else{
+                button[i].setBackgroundResource(R.drawable.bg_round_white);
+            }
         }
         for (int i = 0; i <= 19; i++) {
             final int INDEX;
@@ -188,16 +203,36 @@ public class MainActivity extends AppCompatActivity {
                 @Override
                 public void onClick(View view) {
                     clearText();
-                    if (m_et_search.getText().toString().length() >= 1) {
-                        m_et_search.setText("");
-                        button[0].setBackgroundResource(R.drawable.bg_round_white);
-                        button[0].setTextColor(Color.parseColor("#000000"));
+                    if(flag_theme){
+                        if (m_et_search.getText().toString().length() >= 1) {
+                            m_et_search.setText("");
+                            button[0].setBackgroundResource(R.drawable.bg_round_white_dark);
+                            button[0].setTextColor(Color.parseColor("#000000"));
+                        }
+                        button[INDEX].setBackgroundResource(R.drawable.bg_round_select_dark);
+                        button[INDEX].setTextColor(Color.parseColor("#ffffff"));
+                    }else{
+                        if (m_et_search.getText().toString().length() >= 1) {
+                            m_et_search.setText("");
+                            button[0].setBackgroundResource(R.drawable.bg_round_white);
+                            button[0].setTextColor(Color.parseColor("#000000"));
+                        }
+                        button[INDEX].setBackgroundResource(R.drawable.bg_round_select);
+                        button[INDEX].setTextColor(Color.parseColor("#ffffff"));
                     }
-                    button[INDEX].setBackgroundResource(R.drawable.bg_round_select);
-                    button[INDEX].setTextColor(Color.parseColor("#ffffff"));
                     onData(str_Array[INDEX]);
                 }
             });
+        }
+    }
+
+    public void onSetTheme() {
+        if(flag_theme){
+            m_lay_main.setBackgroundResource(R.color.darktheme_white);
+            m_et_search.setBackgroundResource(R.drawable.bg_round_gray_dark);
+        }else{
+            m_lay_main.setBackgroundResource(R.color.white);
+            m_et_search.setBackgroundResource(R.drawable.bg_round_gray);
         }
     }
 
@@ -212,8 +247,12 @@ public class MainActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
 
-            case R.id.version:
-                setCustomToast(this, "설치된 버전 : " + appVersion);
+            case R.id.setting:
+                SettingDialog settingDialog = new SettingDialog(MainActivity.this);
+                settingDialog.setCancelable(false);
+                settingDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                settingDialog.show();
+
                 break;
 
             case R.id.review:
@@ -313,14 +352,22 @@ public class MainActivity extends AppCompatActivity {
     //초성버튼 색상, 글자색 초기화
     public void clearText() {
         for (int i = 0; i <= 19; i++) {
-            button[i].setBackgroundResource(R.drawable.bg_round_white);
+            if(flag_theme){
+                button[i].setBackgroundResource(R.drawable.bg_round_white_dark);
+            }else{
+                button[i].setBackgroundResource(R.drawable.bg_round_white);
+            }
             button[i].setTextColor(Color.parseColor("#000000"));
         }
     }
 
     //전체버튼 클릭상태 셋팅
     public void onBtnAllSel() {
-        button[0].setBackgroundResource(R.drawable.bg_round_select);
+        if(flag_theme){
+            button[0].setBackgroundResource(R.drawable.bg_round_select_dark);
+        }else{
+            button[0].setBackgroundResource(R.drawable.bg_round_select);
+        }
         button[0].setTextColor(Color.parseColor("#ffffff"));
     }
 
@@ -471,7 +518,7 @@ public class MainActivity extends AppCompatActivity {
         } else {
             if (System.currentTimeMillis() > backKeyPressedTime + 2000) {
                 backKeyPressedTime = System.currentTimeMillis();
-                setCustomToast(this, "\'뒤로\' 버튼을 한번 더 누르시면\n앱이 종료됩니다.");
+                setCustomToast(this, "\'뒤로\' 버튼을 한번 더 누르시면\n앱이 종료돼요.");
 //                Toast.makeText(this, "\'뒤로\' 버튼을 한번 더 누르시면 종료됩니다.", Toast.LENGTH_SHORT).show();
                 return;
             }
@@ -541,7 +588,7 @@ public class MainActivity extends AppCompatActivity {
         tvToastMsg.setText(msg);
         tvToastMsg.setBackgroundResource(R.drawable.bg_round_toast);
         tvToastMsg.setTextColor(Color.WHITE);
-        tvToastMsg.setTextSize(18);
+        tvToastMsg.setTextSize(17);
         tvToastMsg.setPadding(50, 30, 50, 30);
         tvToastMsg.setFontFeatureSettings(String.valueOf(R.font.font_3));
 

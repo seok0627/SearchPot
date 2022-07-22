@@ -10,8 +10,8 @@ android {
         applicationId "com.jys.searchpot"
         minSdk 21
         targetSdk 31
-        versionCode 105
-        versionName "1.0.5"
+        versionCode 106
+        versionName "1.0.6"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -56,6 +56,7 @@ dependencies {
     implementation 'com.google.firebase:firebase-messaging:21.1.0'
     implementation "androidx.swiperefreshlayout:swiperefreshlayout:1.1.0"
     implementation 'com.google.firebase:firebase-firestore'
+    implementation 'androidx.preference:preference:1.2.0'
 }
 
 apply plugin: 'com.google.gms.google-services'

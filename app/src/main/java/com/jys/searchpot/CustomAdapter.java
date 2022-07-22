@@ -27,6 +27,7 @@ import java.util.List;
 
 public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.CustomViewHolder> {
 
+    public LoadingActivity loadingActivity;
     public ArrayList<Store> arrayList;
     public Context context;
     public String storeName = "";
@@ -50,10 +51,20 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.CustomView
     @Override
     public void onBindViewHolder(@NonNull CustomViewHolder holder, int position) {
 
-        if(position % 2 == 1) {
-            holder.lay_item.setBackgroundResource(R.color.gray);
+        holder.flag_theme = loadingActivity.flag_theme;
+
+        if(holder.flag_theme){
+            if(position % 2 == 1) {
+                holder.lay_item.setBackgroundResource(R.color.darktheme_gray);
+            }else{
+                holder.lay_item.setBackgroundResource(R.color.darktheme_white);
+            }
         }else{
-            holder.lay_item.setBackgroundResource(R.color.white);
+            if(position % 2 == 1) {
+                holder.lay_item.setBackgroundResource(R.color.gray);
+            }else{
+                holder.lay_item.setBackgroundResource(R.color.white);
+            }
         }
 
         Glide.with(holder.itemView)
@@ -63,6 +74,8 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.CustomView
                 .circleCrop()
                 .into(holder.iv_profrile);
 
+        holder.iNum = holder.getAdapterPosition();
+        holder.txt_profile = arrayList.get(position).getProfile();
         holder.tv_storeName.setText(arrayList.get(position).getStoreName());
         holder.txt_name = arrayList.get(position).getStoreName();
         holder.txt_ins = arrayList.get(position).getInsUrl();
@@ -94,6 +107,9 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.CustomView
         String txt_name = "";
         String txt_ins = "";
         String txt_store = "";
+        int    iNum = 0;
+        String txt_profile = "";
+        boolean flag_theme = false;
 
         public CustomViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -103,10 +119,18 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.CustomView
             this.btn_ins = itemView.findViewById(R.id.btn_ins);
             this.btn_store = itemView.findViewById(R.id.btn_store);
 
-            this.tv_storeName.setOnClickListener(new View.OnClickListener() {
+            this.lay_item.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    //Snackbar.make(itemView, txt_name + " 터치", 1500).show();
+                    //Snackbar.make(itemView, txt_name + " 터치 / iNum : " + iNum, 1500).show();
+                }
+            });
+
+            this.lay_item.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View view) {
+                    //Snackbar.make(itemView, txt_name + " 터치 / iNum : " + txt_profile, 1500).show();
+                    return false;
                 }
             });
 

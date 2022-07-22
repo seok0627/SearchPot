@@ -14,4 +14,11 @@
     <color name="mint">#7DCA81</color>
     <color name="dark_mint">#5B9A5E</color>
     <color name="dark_green">#E6022701</color>
+    <color name="hint">#E67A7A7A</color>
+
+    <!-- dark theme -->
+    <color name="darktheme_loading">#E6033002</color>
+    <color name="darktheme_gray">#202020</color>
+    <color name="darktheme_white">#2B2B2B</color>
+    <color name="darktheme_menu">#ADADAD</color>
 </resources>

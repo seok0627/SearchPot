@@ -2,4 +2,8 @@
     <string name="app_name">써치팟</string>
     <string name="channel_id">900627</string>
     <string name="channel_name">SearchPot</string>
+
+
+    <!-- 환경설정 셋팅값 -->
+    <string name="key_setting_theme">key_setting_theme</string>
 </resources>

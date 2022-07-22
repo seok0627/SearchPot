@@ -63,11 +63,13 @@
                 android:layout_height="match_parent"
                 android:fontFamily="@font/font_3"
                 android:hint="브랜드 명(한글)을 입력해주세요"
+                android:textColorHint="@color/hint"
                 android:inputType="text"
                 android:maxLines="1"
                 android:singleLine="true"
                 android:textColor="@color/black"
-                android:textSize="15dp" />
+                android:textSize="15dp"
+                android:theme="@style/Theme.AppCompat.Light"/>
         </LinearLayout>
 
         <View
@@ -94,11 +96,13 @@
                 android:layout_height="match_parent"
                 android:fontFamily="@font/font_3"
                 android:hint="인스타 주소(URL)을 입력해주세요"
+                android:textColorHint="@color/hint"
                 android:inputType="text"
                 android:maxLines="1"
                 android:singleLine="true"
                 android:textColor="@color/black"
-                android:textSize="15dp" />
+                android:textSize="15dp"
+                android:theme="@style/Theme.AppCompat.Light"/>
         </LinearLayout>
 
         <View
@@ -126,11 +130,13 @@
                 android:layout_height="match_parent"
                 android:fontFamily="@font/font_3"
                 android:hint="스토어 주소(URL)을 입력해주세요"
+                android:textColorHint="@color/hint"
                 android:inputType="text"
                 android:maxLines="1"
                 android:singleLine="true"
                 android:textColor="@color/black"
-                android:textSize="15dp" />
+                android:textSize="15dp"
+                android:theme="@style/Theme.AppCompat.Light"/>
         </LinearLayout>
 
         <View

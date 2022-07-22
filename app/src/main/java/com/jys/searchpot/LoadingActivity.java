@@ -3,23 +3,28 @@ package com.jys.searchpot;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.LinearLayout;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
 import androidx.core.app.ActivityCompat;
 
 
 public class LoadingActivity extends AppCompatActivity {
 
-    Animation anim_FadeIn;
-    LinearLayout lay_loading;
+    public Animation anim_FadeIn;
+    public LinearLayout lay_loading;
+    public SharedPreferences prefs;
+    public static boolean flag_theme = false;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -34,6 +39,16 @@ public class LoadingActivity extends AppCompatActivity {
     public void onInit() {
         lay_loading = (LinearLayout) findViewById(R.id.lay_loading);
         anim_FadeIn = AnimationUtils.loadAnimation(this, R.anim.anim_splash_fadein);
+
+        prefs = this.getSharedPreferences("prefs", MODE_PRIVATE) ;
+        flag_theme = prefs.getBoolean(String.valueOf(R.string.key_setting_theme), false);
+        if(flag_theme){
+            lay_loading.setBackgroundResource(R.color.darktheme_white);
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+        }else{
+            lay_loading.setBackgroundResource(R.color.white);
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+        }
     }
 
     public void onAnimation() {
